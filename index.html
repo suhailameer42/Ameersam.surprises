@@ -123,7 +123,7 @@ canvas {
 #grain {
   position: absolute; inset: 0; z-index: 51; pointer-events: none;
   opacity: 0.05; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='[w3.org](http://www.w3.org/2000/svg)' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 #replayBtn {
@@ -137,6 +137,50 @@ canvas {
   transition: all .3s ease;
 }
 #replayBtn:hover { background: rgba(255,45,138,0.25); color: #fff; transform: rotate(-90deg); }
+
+.share-card {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 80;
+  width: min(92vw, 320px);
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(10, 10, 16, 0.82);
+  border: 1px solid rgba(255, 140, 190, 0.3);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.share-title {
+  font-size: 13px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 8px;
+}
+.share-link {
+  display: block;
+  margin: 8px 0 10px;
+  font-size: 14px;
+  color: #ffd9eb;
+  word-break: break-all;
+}
+.share-qr {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  background: #fff;
+  padding: 8px;
+  display: block;
+  margin: 0 auto;
+}
+.share-note {
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 8px;
+}
 
 /* ============================================================
    APP LAYER -- passcode / menu / subpages (flat, always crisp & clickable)
@@ -550,6 +594,156 @@ canvas {
   font-size: 30px;
 }
 
+/* ============================================================
+   QUESTION GAME ("Will you be my...") -- escalating YES/NO cards
+   ============================================================ */
+#screen-qgame { background: radial-gradient(ellipse at 50% 30%, rgba(60,10,30,0.55), rgba(0,0,0,0.88) 70%); }
+.qcard {
+  width: min(92vw, 380px);
+  background: linear-gradient(160deg, #fff9fb, #ffe3ee);
+  border-radius: 22px;
+  padding: 30px 22px 34px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+  position: relative;
+  overflow: visible;
+}
+.qcard-question {
+  color: #a3184f;
+  font-size: clamp(19px, 4.4vw, 25px);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 22px;
+  min-height: 68px;
+}
+.qcard-btns {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+  min-height: 60px;
+}
+.qbtn {
+  border: none; border-radius: 30px;
+  font-weight: 700; cursor: pointer;
+  font-family: inherit;
+  transition: transform .25s cubic-bezier(.34,1.56,.64,1), font-size .25s ease, padding .25s ease, opacity .25s ease;
+}
+.qbtn-yes {
+  background: linear-gradient(135deg, #ff5fa0, #ff2d78);
+  color: #fff;
+  padding: 14px 30px;
+  font-size: 17px;
+  box-shadow: 0 8px 20px rgba(255,45,138,0.5);
+}
+.qbtn-yes:hover { transform: scale(1.06); }
+.qbtn-no {
+  background: #eee;
+  color: #666;
+  padding: 10px 16px;
+  font-size: 13px;
+}
+.qcard-char {
+  margin-top: 26px;
+  font-size: 64px;
+  transition: transform .3s ease;
+}
+.qcard-char.shake { animation: shakeX .4s ease; }
+.qprogress {
+  display: flex; gap: 6px; justify-content: center; margin-top: 22px;
+}
+.qprogress span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  transition: background .3s ease, transform .3s ease;
+}
+.qprogress span.done { background: #ff4fa3; transform: scale(1.3); }
+
+.qflash {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #ff5722, #ff2d55);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 80;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+}
+.qflash.show { opacity: 1; pointer-events: auto; }
+.qflash-text {
+  color: #fff; font-weight: 800;
+  font-size: clamp(60px, 16vw, 130px);
+  letter-spacing: 2px;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  transform: scale(0.7);
+  transition: transform .5s cubic-bezier(.34,1.56,.64,1);
+}
+.qflash.show .qflash-text { transform: scale(1); }
+
+/* ---- Reunion screen ---- */
+.reunion-emojis { font-size: 74px; margin-bottom: 18px; }
+.reunion-emojis span { display: inline-block; animation: floatY 3s ease-in-out infinite; }
+.reunion-emojis span:last-child { animation-delay: .4s; }
+.reunion-next {
+  margin-top: 30px;
+  padding: 13px 28px;
+  font-size: 14px; letter-spacing: 2px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff2d8a, #ff7ab8);
+  border: none; border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 0 22px rgba(255,45,138,0.6);
+  transition: transform .25s ease;
+}
+.reunion-next:hover { transform: translateY(-2px) scale(1.03); }
+
+/* ---- Note / instax card ---- */
+.instax-card {
+  width: min(88vw, 280px);
+  background: #fff;
+  border-radius: 6px;
+  padding: 14px 14px 46px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+  transform: rotate(-2deg);
+}
+.instax-photo {
+  width: 100%; aspect-ratio: 1/1;
+  border-radius: 2px;
+  background: linear-gradient(135deg, #ffb6d5, #7a3cff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 54px;
+  overflow: hidden;
+}
+.instax-photo img { width: 100%; height: 100%; object-fit: cover; }
+.note-message {
+  margin-top: 20px; max-width: 440px;
+  font-size: 16px; line-height: 1.6; color: #ffe3f0;
+}
+
+/* ---- Letter scroll ---- */
+.scroll-wrap {
+  width: min(90vw, 440px);
+  background: linear-gradient(160deg, #f6e3bd, #e8c98d);
+  border: 1px solid rgba(120,80,20,0.35);
+  border-radius: 14px;
+  padding: 30px 26px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.55);
+  color: #4a2e0e;
+  max-height: 56vh;
+  overflow-y: auto;
+}
+.scroll-text {
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: clamp(18px, 3.6vw, 23px);
+  line-height: 1.65;
+  white-space: pre-line;
+  text-align: left;
+}
+.scroll-cursor {
+  display: inline-block;
+  width: 2px; height: 1em;
+  background: #4a2e0e;
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
 </style>
 </head>
 <body>
@@ -667,6 +861,48 @@ Always yours.</div>
     </div>
 
     <button class="back-btn back-btn-inline" data-back>← Back to Surprises</button>
+    <button class="reunion-next" id="finalContinueBtn" style="margin-top:14px;">One More Thing ➜</button>
+  </div>
+
+  <!-- QUESTION GAME: "Will you be my..." escalating YES / NO -->
+  <div class="app-screen" id="screen-qgame">
+    <div class="qcard">
+      <div class="qcard-question" id="qQuestion">Will you be my most dialed number?</div>
+      <div class="qcard-btns">
+        <button class="qbtn qbtn-yes" id="qYesBtn">YES</button>
+        <button class="qbtn qbtn-no" id="qNoBtn">NO</button>
+      </div>
+      <div class="qcard-char" id="qChar">🐰</div>
+      <div class="qprogress" id="qProgress"></div>
+    </div>
+    <div class="qflash" id="qFlash"><div class="qflash-text">YES</div></div>
+  </div>
+
+  <!-- REUNION: "Knew you would say YES!!" -->
+  <div class="app-screen" id="screen-knew">
+    <div class="reunion-emojis"><span>🐰</span><span>🤎</span><span>🐰</span></div>
+    <div class="glow-title" style="font-size:34px;">Knew you would say YES!!</div>
+    <div class="sub-title" style="margin-bottom:6px;">wait, this is not the end</div>
+    <button class="reunion-next" id="toNoteBtn">Continue ➜</button>
+  </div>
+
+  <!-- NOTE / INSTAX CARD -->
+  <div class="app-screen" id="screen-note">
+    <div class="glow-title" style="font-size:30px;">Sameera, is it illegal<br>to call you mine now? &lt;3</div>
+    <div class="instax-card" style="margin-top:18px;">
+      <div class="instax-photo">📷</div>
+    </div>
+    <div class="note-message">here's a little note for you</div>
+    <button class="reunion-next" id="toLetterBtn">Read It ➜</button>
+  </div>
+
+  <!-- HANDWRITTEN LETTER SCROLL -->
+  <div class="app-screen" id="screen-scrollLetter">
+    <div class="glow-title" style="font-size:30px;">Here's to whatever comes next 🤍</div>
+    <div class="scroll-wrap" style="margin-top:16px;">
+      <div class="scroll-text" id="scrollText"></div>
+    </div>
+    <button class="back-btn back-btn-inline" id="scrollBackBtn" style="display:none;">← Back to Menu</button>
   </div>
 
 </div>
@@ -676,6 +912,8 @@ Always yours.</div>
 <div id="vignette"></div>
 <div id="grain"></div>
 <button id="replayBtn" title="Replay intro">↻</button>
+
+
 
 <script>
 /* ====================== CONFIG ====================== */
@@ -941,6 +1179,10 @@ function restartIntro() {
   // reset finale tracking so a replay lets her collect the surprises again
   completedSurprises.clear();
   document.querySelectorAll(".surprise-card").forEach(c => c.classList.remove("done"));
+  qIndex = 0;
+  letterTyped = false;
+  scrollBackBtn.style.display = "none";
+  scrollTextEl.textContent = "";
   setTimeout(runStep, 300);
 }
 
@@ -1214,6 +1456,129 @@ function runTravelReveal() {
   }, 900);
 }
 
+/* ====================== "WILL YOU BE MY..." QUESTION GAME ====================== */
+const QUESTIONS = [
+  { q: "Will you be my most dialed number?",           no: "NO",                  char: "🐰" },
+  { q: "Will you be my plus 1?",                        no: "Huh!? Are you sure",  char: "😳" },
+  { q: "Will you be my home in a person?",              no: "Really sure?",        char: "🥺" },
+  { q: "Will you be my favorite distraction?",          no: "Are you positive?",   char: "🙈" },
+  { q: "Will you be my passenger princess?",            no: "Just think about it", char: "😤" },
+  { q: "Will you be my plot twist?",                    no: "If you say no I'll be sad", char: "🥹" },
+  { q: "Will you be mine, today and always?",           no: "I will be very sad",  char: "😢" }
+];
+let qIndex = 0;
+const qQuestion = document.getElementById("qQuestion");
+const qYesBtn = document.getElementById("qYesBtn");
+const qNoBtn = document.getElementById("qNoBtn");
+const qChar = document.getElementById("qChar");
+const qProgress = document.getElementById("qProgress");
+const qFlash = document.getElementById("qFlash");
+
+function buildProgress() {
+  qProgress.innerHTML = "";
+  QUESTIONS.forEach(() => {
+    const dot = document.createElement("span");
+    qProgress.appendChild(dot);
+  });
+}
+
+function renderQuestion() {
+  const step = QUESTIONS[qIndex];
+  qQuestion.textContent = step.q;
+  qChar.textContent = step.char;
+  qNoBtn.textContent = step.no;
+
+  // YES grows, NO shrinks as the questions go on
+  const yesScale = 1 + qIndex * 0.09;
+  const noScale = Math.max(1 - qIndex * 0.13, 0.35);
+  qYesBtn.style.transform = `scale(${yesScale})`;
+  qYesBtn.style.fontSize = `${17 + qIndex * 1.4}px`;
+  qNoBtn.style.transform = `scale(${noScale})`;
+  qNoBtn.style.opacity = Math.max(1 - qIndex * 0.1, 0.4);
+
+  [...qProgress.children].forEach((dot, i) => dot.classList.toggle("done", i < qIndex));
+}
+
+function startQuestionGame() {
+  qIndex = 0;
+  buildProgress();
+  renderQuestion();
+  qFlash.classList.remove("show");
+  goToScreen("screen-qgame");
+}
+
+qNoBtn.addEventListener("click", () => {
+  qChar.classList.remove("shake");
+  void qChar.offsetWidth; // restart animation
+  qChar.classList.add("shake");
+  // playful dodge on later questions
+  if (qIndex >= 3) {
+    const dx = (Math.random() - 0.5) * 60;
+    qNoBtn.style.marginLeft = `${dx}px`;
+    setTimeout(() => { qNoBtn.style.marginLeft = "0"; }, 300);
+  }
+});
+
+qYesBtn.addEventListener("click", () => {
+  if (qIndex < QUESTIONS.length - 1) {
+    qIndex++;
+    renderQuestion();
+  } else {
+    // final YES -> full screen flash, then reunion screen
+    qFlash.classList.add("show");
+    spawnConfetti(qFlash, 40);
+    setTimeout(() => {
+      goToScreen("screen-knew");
+      spawnConfetti(document.getElementById("screen-knew"), 60);
+    }, 1400);
+  }
+});
+
+document.getElementById("finalContinueBtn").addEventListener("click", startQuestionGame);
+document.getElementById("toNoteBtn").addEventListener("click", () => goToScreen("screen-note"));
+document.getElementById("toLetterBtn").addEventListener("click", () => {
+  goToScreen("screen-scrollLetter");
+  setTimeout(runLetterTypewriter, 500);
+});
+
+/* ---- Handwritten letter typewriter reveal ---- */
+const LETTER_TEXT = `I didn't make this to impress you. I made it because you matter to me.
+Saying yes didn't just answer a question, it made this feel real.
+
+I don't know where this goes, but I know I'd like to spend my life
+choosing you \u2014 even in the smallest ways.
+
+Thank you for saying yes.
+Happy Birthday, Sameera \u2764`;
+
+const scrollTextEl = document.getElementById("scrollText");
+const scrollBackBtn = document.getElementById("scrollBackBtn");
+let letterTyped = false;
+
+function runLetterTypewriter() {
+  if (letterTyped) return;
+  letterTyped = true;
+  scrollTextEl.textContent = "";
+  const cursor = document.createElement("span");
+  cursor.className = "scroll-cursor";
+  scrollTextEl.appendChild(cursor);
+  let i = 0;
+  function typeNext() {
+    if (i < LETTER_TEXT.length) {
+      cursor.insertAdjacentText("beforebegin", LETTER_TEXT[i]);
+      i++;
+      setTimeout(typeNext, 28);
+    } else {
+      cursor.remove();
+      scrollBackBtn.style.display = "inline-block";
+      spawnConfetti(document.getElementById("screen-scrollLetter"), 50);
+    }
+  }
+  typeNext();
+}
+
+scrollBackBtn.addEventListener("click", () => goToScreen("screen-menu"));
+
 /* ====================== INIT ====================== */
 resize();
 window.addEventListener("resize", resize);
@@ -1221,16 +1586,6 @@ ensureParticles(NUM_PARTICLES_TARGET);
 animate();
 setCamera({ scale: 1.05, rotX: 2, rotY: -3, tz: -30, duration: 2 });
 setTimeout(restartIntro, 1200);
-
-
-
-
-
-
-
-
-
-
 </script>
 </body>
 </html>
