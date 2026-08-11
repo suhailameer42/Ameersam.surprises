@@ -140,11 +140,12 @@ canvas {
 
 .share-card {
   position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
+  right: 16px;
+  top: 16px;
+  left: auto;
+  bottom: auto;
   z-index: 80;
-  width: min(92vw, 320px);
+  width: min(86vw, 320px);
   padding: 16px;
   border-radius: 18px;
   background: rgba(10, 10, 16, 0.82);
@@ -760,6 +761,13 @@ canvas {
   <div id="hint">CLICK ANYWHERE TO REPLAY</div>
 </div>
 
+<div class="share-card" id="shareCard">
+  <div class="share-title">Share this surprise</div>
+  <a class="share-link" id="shareLink" href="#" target="_blank" rel="noreferrer noopener"></a>
+  <img class="share-qr" id="shareQr" alt="QR code to open surprise" />
+  <div class="share-note" id="shareNote">Copy the link or scan the QR after hosting this page publicly.</div>
+</div>
+
 <div id="appLayer">
 
   <!-- PASSCODE SCREEN -->
@@ -946,6 +954,16 @@ const pctx = particleCanvas.getContext("2d");
 const labelEl = document.getElementById("label");
 const hintEl = document.getElementById("hint");
 const continueBtn = document.getElementById("continueBtn");
+const shareLinkEl = document.getElementById("shareLink");
+const shareQrEl = document.getElementById("shareQr");
+const shareNoteEl = document.getElementById("shareNote");
+
+const currentShareUrl = "https://suhailameer42.github.io/Ameersam.surprises/sam.html";
+const encodedShareUrl = encodeURIComponent(currentShareUrl.replace(/#/g, "%23"));
+shareLinkEl.href = currentShareUrl;
+shareLinkEl.textContent = currentShareUrl;
+shareQrEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodedShareUrl}`;
+shareNoteEl.textContent = "Scan the QR code or copy the link to open the published GitHub Pages surprise page.";
 
 function resize() {
   [matrixCanvas, particleCanvas].forEach(c => {
