@@ -138,51 +138,6 @@ canvas {
 }
 #replayBtn:hover { background: rgba(255,45,138,0.25); color: #fff; transform: rotate(-90deg); }
 
-.share-card {
-  position: absolute;
-  right: 16px;
-  top: 16px;
-  left: auto;
-  bottom: auto;
-  z-index: 80;
-  width: min(86vw, 320px);
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(10, 10, 16, 0.82);
-  border: 1px solid rgba(255, 140, 190, 0.3);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-  text-align: center;
-  backdrop-filter: blur(8px);
-}
-.share-title {
-  font-size: 13px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.72);
-  margin-bottom: 8px;
-}
-.share-link {
-  display: block;
-  margin: 8px 0 10px;
-  font-size: 14px;
-  color: #ffd9eb;
-  word-break: break-all;
-}
-.share-qr {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  background: #fff;
-  padding: 8px;
-  display: block;
-  margin: 0 auto;
-}
-.share-note {
-  font-size: 12px;
-  color: rgba(255,255,255,0.65);
-  margin-top: 8px;
-}
-
 /* ============================================================
    APP LAYER -- passcode / menu / subpages (flat, always crisp & clickable)
    ============================================================ */
@@ -761,13 +716,6 @@ canvas {
   <div id="hint">CLICK ANYWHERE TO REPLAY</div>
 </div>
 
-<div class="share-card" id="shareCard">
-  <div class="share-title">Share this surprise</div>
-  <a class="share-link" id="shareLink" href="#" target="_blank" rel="noreferrer noopener"></a>
-  <img class="share-qr" id="shareQr" alt="QR code to open surprise" />
-  <div class="share-note" id="shareNote">Copy the link or scan the QR after hosting this page publicly.</div>
-</div>
-
 <div id="appLayer">
 
   <!-- PASSCODE SCREEN -->
@@ -954,16 +902,6 @@ const pctx = particleCanvas.getContext("2d");
 const labelEl = document.getElementById("label");
 const hintEl = document.getElementById("hint");
 const continueBtn = document.getElementById("continueBtn");
-const shareLinkEl = document.getElementById("shareLink");
-const shareQrEl = document.getElementById("shareQr");
-const shareNoteEl = document.getElementById("shareNote");
-
-const currentShareUrl = "https://suhailameer42.github.io/Ameersam.surprises/sam.html";
-const encodedShareUrl = encodeURIComponent(currentShareUrl.replace(/#/g, "%23"));
-shareLinkEl.href = currentShareUrl;
-shareLinkEl.textContent = currentShareUrl;
-shareQrEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodedShareUrl}`;
-shareNoteEl.textContent = "Scan the QR code or copy the link to open the published GitHub Pages surprise page.";
 
 function resize() {
   [matrixCanvas, particleCanvas].forEach(c => {
