@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Surprise QR</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 40px 30px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .subtitle {
+      margin: 0 0 30px;
+      color: rgba(255,255,255,0.8);
+      font-size: 1rem;
+    }
+    .qr-box {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 30px 0;
+      display: inline-block;
+    }
+    .qr-box img {
+      width: 300px;
+      height: 300px;
+      display: block;
+    }
+    .link-section {
+      margin: 30px 0;
+      padding: 20px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+    }
+    .link-label {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 10px;
+    }
+    .link {
+      display: inline-block;
+      padding: 12px 20px;
+      background: #ff6b9d;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      word-break: break-all;
+      max-width: 100%;
+    }
+    .link:hover {
+      background: #ff5580;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,107,157,0.4);
+    }
+    .instructions {
+      margin-top: 30px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+    .copy-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .copy-btn:hover {
+      background: #45a049;
+    }
+    .copy-status {
+      margin-top: 10px;
+      color: #4CAF50;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>🎉 Surprise Gift</h1>
+      <p class="subtitle">Scan the QR or click the link below</p>
+      
+      <div class="qr-box">
+        <img id="qrImage" src="" alt="Surprise QR Code" />
+      </div>
+      
+      <div class="link-section">
+        <div class="link-label">Or open directly:</div>
+        <a href="https://suhailameer42.github.io/Ameersam.surprises/sam.html" class="link">
+          Open Surprise 🎁
+        </a>
+        <br>
+        <button class="copy-btn" onclick="copyLink()">Copy Link</button>
+        <div class="copy-status" id="copyStatus"></div>
+      </div>
+      
+      <div class="instructions">
+        <strong>Instructions:</strong><br>
+        1. Try clicking the link above first<br>
+        2. If that works, then scan the QR code<br>
+        3. The surprise will appear!
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const surpriseUrl = "https://suhailameer42.github.io/Ameersam.surprises/sam.html";
+    
+    // Multiple QR code services for redundancy
+    function generateQR() {
+      const img = document.getElementById('qrImage');
+      // Try Google Charts API first
+      img.src = `https://chart.googleapis.com/chart?chs=300x300&chld=M|0&cht=qr&chl=${encodeURIComponent(surpriseUrl)}`;
+      
+      // Fallback to another service if first fails
+      img.onerror = function() {
+        this.src = `https://qr.gopuff.com/?data=${encodeURIComponent(surpriseUrl)}&size=300x300`;
+      };
+    }
+    
+    function copyLink() {
+      navigator.clipboard.writeText(surpriseUrl).then(() => {
+        document.getElementById('copyStatus').textContent = '✓ Link copied to clipboard!';
+        setTimeout(() => {
+          document.getElementById('copyStatus').textContent = '';
+        }, 2000);
+      }).catch(() => {
+        document.getElementById('copyStatus').textContent = 'Please copy manually';
+      });
+    }
+    
+    // Generate QR when page loads
+    window.addEventListener('load', generateQR);
+  </script>
+</body>
+</html>
