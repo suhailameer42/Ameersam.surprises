@@ -90,13 +90,12 @@
 
   <script>
     const shareUrl = "https://suhailameer42.github.io/Ameersam.surprises/sam.html";
-    const encoded = encodeURIComponent(shareUrl.replace(/#/g, "%23"));
     const qrImage = document.getElementById("qrImage");
     const shareUrlEl = document.getElementById("shareUrl");
     const copyButton = document.getElementById("copyButton");
     const copyStatus = document.getElementById("copyStatus");
 
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encoded}`;
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${shareUrl}`;
     shareUrlEl.textContent = shareUrl;
 
     copyButton.addEventListener("click", async () => {
