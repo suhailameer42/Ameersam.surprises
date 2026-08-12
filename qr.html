@@ -95,7 +95,9 @@
     const copyButton = document.getElementById("copyButton");
     const copyStatus = document.getElementById("copyStatus");
 
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${shareUrl}`;
+    // Use Google Charts API for QR code - more reliable
+    const encodedUrl = encodeURIComponent(shareUrl);
+    qrImage.src = `https://chart.googleapis.com/chart?chs=280x280&chld=L|0&cht=qr&chl=${encodedUrl}`;
     shareUrlEl.textContent = shareUrl;
 
     copyButton.addEventListener("click", async () => {
