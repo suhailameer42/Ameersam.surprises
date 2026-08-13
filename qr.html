@@ -36,8 +36,8 @@
       line-height: 1.6;
     }
     .qr {
-      width: 280px;
-      height: 280px;
+      width: 320px;
+      height: 320px;
       border-radius: 18px;
       background: #fff;
       display: inline-flex;
@@ -81,7 +81,7 @@
     <h1>Send the Surprise QR</h1>
     <p>Share this QR code with the person who should open the surprise. Scanning it will take them directly to the hidden page.</p>
     <div class="qr">
-      <img id="qrImage" src="" alt="Surprise QR code" loading="lazy" width="260" height="260" />
+      <img id="qrImage" src="" alt="Surprise QR code" loading="lazy" width="300" height="300" />
     </div>
     <div class="link-box" id="shareUrl"></div>
     <button id="copyButton">Copy surprise link</button>
@@ -95,8 +95,9 @@
     const copyButton = document.getElementById("copyButton");
     const copyStatus = document.getElementById("copyStatus");
 
-    // Use QR Server API with proper CORS support
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(shareUrl)}`;
+    // Use QR Server API with proper encoding - larger size for better scanning
+    const encoded = encodeURIComponent(shareUrl);
+    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&format=png&data=${encoded}`;
     shareUrlEl.textContent = shareUrl;
 
     copyButton.addEventListener("click", async () => {
