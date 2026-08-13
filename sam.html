@@ -1442,39 +1442,52 @@ function initMusicPlayer() {
   musicAudio.loop = true;
   musicAudio.muted = false;
   musicAudio.volume = 0.7;
+  musicAudio.preload = "auto";
 
-  setMusicButtonState(false);
+  let musicStarted = false;
 
-  const startMusicOnUserAction = async () => {
+  const startMusic = async () => {
+    if (musicStarted) return;
+
     try {
-      if (musicAudio.paused) {
-        await musicAudio.play();
-        setMusicButtonState(true);
-      }
+      musicStarted = true;
+      musicAudio.muted = false;
+      musicAudio.load();
+      await musicAudio.play();
+      setMusicButtonState(true);
     } catch (error) {
+      musicStarted = false;
       console.log("Audio play blocked until user interaction:", error);
+      setMusicButtonState(false);
     }
   };
+
+  setMusicButtonState(false);
 
   musicToggleBtn.addEventListener("click", async () => {
     try {
       if (musicAudio.paused) {
         await musicAudio.play();
+        musicStarted = true;
         setMusicButtonState(true);
       } else {
         musicAudio.pause();
+        musicStarted = false;
         setMusicButtonState(false);
       }
     } catch (error) {
       console.log("Audio play blocked until user interaction:", error);
+      musicStarted = false;
+      setMusicButtonState(false);
     }
   });
 
   musicAudio.addEventListener("play", () => setMusicButtonState(true));
   musicAudio.addEventListener("pause", () => setMusicButtonState(false));
 
-  document.addEventListener("pointerdown", startMusicOnUserAction, { once: true });
-  document.addEventListener("keydown", startMusicOnUserAction, { once: true });
+  document.addEventListener("pointerdown", startMusic, { once: true });
+  document.addEventListener("touchstart", startMusic, { once: true });
+  document.addEventListener("keydown", startMusic, { once: true });
 }
 
 initMusicPlayer();
