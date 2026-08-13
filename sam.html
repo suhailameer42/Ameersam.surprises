@@ -890,7 +890,9 @@ Always yours.</div>
   <div class="app-screen" id="screen-note">
     <div class="glow-title" style="font-size:30px;">Sameera, is it illegal<br>to call you mine now? &lt;3</div>
     <div class="instax-card" style="margin-top:18px;">
-      <div class="instax-photo">📷</div>
+      <div class="instax-photo">
+        <img src="images/pics.png" alt="Your photo" onerror="this.onerror=null; this.src='images/placeholder-photo.svg';" />
+      </div>
     </div>
     <div class="note-message">here's a little note for you</div>
     <button class="reunion-next" id="toLetterBtn">Read It ➜</button>
@@ -937,6 +939,7 @@ const galleryImages = [
   "images/photo5.jpg",
   "images/photo6.jpg"
 ];
+const noteImage = "images/pics.png";
 
 /* ====================== CANVAS SETUP ====================== */
 const matrixCanvas = document.getElementById("matrix");
@@ -1382,6 +1385,14 @@ const galleryOverlay = document.getElementById("galleryOverlay");
 const overlayImg = document.getElementById("overlayImg");
 const overlayMsg = document.getElementById("overlayMsg");
 const heartField = document.getElementById("heartField");
+const notePhoto = document.querySelector("#screen-note .instax-photo img");
+
+if (notePhoto) {
+  notePhoto.src = noteImage;
+  notePhoto.onerror = () => {
+    notePhoto.src = "images/placeholder-photo.svg";
+  };
+}
 
 const memoryMessages = [
   "🤏 You're tiny... but you take up my whole heart.",

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title desc">
+  <title id="title">Placeholder Photo</title>
+  <desc id="desc">A soft pink and purple placeholder photo for adding a real image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f7c9e1"/>
+      <stop offset="45%" stop-color="#d6a8ff"/>
+      <stop offset="100%" stop-color="#8f7cf7"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <g opacity="0.9">
+    <circle cx="300" cy="220" r="125" fill="#f5edf9" opacity="0.8"/>
+    <rect x="165" y="250" width="270" height="170" rx="28" fill="#f5edf9" opacity="0.8"/>
+  </g>
+  <g transform="translate(0 10)">
+    <circle cx="300" cy="205" r="58" fill="#d7d9e8"/>
+    <path d="M227 325 L373 325 L394 395 L206 395 Z" fill="#d7d9e8"/>
+  </g>
+  <g fill="#7a3cff" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">
+    <text x="300" y="478" font-size="36">ADD YOUR PHOTO</text>
+  </g>
+</svg>
