@@ -1322,6 +1322,17 @@ const appLayer = document.getElementById("appLayer");
 const allScreens = document.querySelectorAll(".app-screen");
 const bgScene = document.getElementById("bgScene");
 
+async function startMusicFromUserGesture() {
+  if (!musicAudio) return;
+  try {
+    await musicAudio.play();
+    setMusicButtonState(true);
+  } catch (error) {
+    console.log("Audio play blocked until the user interacts with the page:", error);
+    setMusicButtonState(false);
+  }
+}
+
 function goToScreen(name) {
   if (name === null) {
     appLayer.classList.remove("show");
@@ -1342,6 +1353,9 @@ function goToScreen(name) {
   bgScene.style.opacity = "0";
   bgScene.style.pointerEvents = "none";
 
+  if (name === "screen-menu") {
+    startMusicFromUserGesture();
+  }
 }
 
 continueBtn.addEventListener("click", () => {
