@@ -1445,6 +1445,17 @@ function initMusicPlayer() {
 
   setMusicButtonState(false);
 
+  const startMusicOnUserAction = async () => {
+    try {
+      if (musicAudio.paused) {
+        await musicAudio.play();
+        setMusicButtonState(true);
+      }
+    } catch (error) {
+      console.log("Audio play blocked until user interaction:", error);
+    }
+  };
+
   musicToggleBtn.addEventListener("click", async () => {
     try {
       if (musicAudio.paused) {
@@ -1462,11 +1473,8 @@ function initMusicPlayer() {
   musicAudio.addEventListener("play", () => setMusicButtonState(true));
   musicAudio.addEventListener("pause", () => setMusicButtonState(false));
 
-  musicAudio.play().then(() => {
-    setMusicButtonState(true);
-  }).catch(() => {
-    setMusicButtonState(false);
-  });
+  document.addEventListener("pointerdown", startMusicOnUserAction, { once: true });
+  document.addEventListener("keydown", startMusicOnUserAction, { once: true });
 }
 
 initMusicPlayer();
